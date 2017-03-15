@@ -9,20 +9,25 @@ Given a list of non-negative integers representing the amount of money of each h
 算法思路：
 遍历的同时记录抢某一家与未抢某一家的最大金额
 */
+
+/*
+时间复杂度:O(n)
+空间复杂度:O(1)
+*/
+
 class Solution {
 public:
     int rob(vector<int>& nums) {
         if(nums.size()==0)return 0;
         if(nums.size()==1)return nums[0];
-        int* robLast=new int[nums.size()];
-        robLast[0]=nums[0];
-        int* notRobLast=new int[nums.size()];
-        notRobLast[0]=0;
+        int robLast=nums[0];
+        int notRobLast=0;
         for(int i=1;i<nums.size();i++){
-            notRobLast[i]=max(robLast[i-1],notRobLast[i-1]);
-            robLast[i]=max(notRobLast[i-1]+nums[i],robLast[i-1]);
+            int tmp=notRobLast;
+            notRobLast=max(robLast,notRobLast);
+            robLast=tmp+nums[i];
         }
-        return max(notRobLast[nums.size()-1],robLast[nums.size()-1]);
+        return max(notRobLast,robLast);
         
     }
 };
