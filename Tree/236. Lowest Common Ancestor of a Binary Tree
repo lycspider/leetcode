@@ -1,0 +1,49 @@
+/*
+Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
+According to the definition of LCA on Wikipedia: 
+  “The lowest common ancestor is defined between two nodes v and w as the lowest node in T 
+  that has both v and w as descendants (where we allow a node to be a descendant of itself).”
+
+        _______3______
+       /              \
+    ___5__          ___1__
+   /      \        /      \
+   6      _2       0       8
+         /  \
+         7   4
+For example, the lowest common ancestor (LCA) of nodes 5 and 1 is 3.
+Another example is LCA of nodes 5 and 4 is 5, since a node can be a descendant of itself according to the LCA definition.
+
+ 求两个树节点的最近公共祖先节点
+*/
+
+
+/*  
+算法思想 ：递归查找节点p和q并返回，若未找到则返回空,这样对于每个节点都可以知道其左右子节点是否找到p或q。
+		  对于某个节点，若左右孩子分别找到p和q，即左右子节点均有返回值（分别返回p和q），则第一个这样的节点即p和q的最近公共祖先。
+*/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root) return NULL;
+        if(root==p)return p;
+        if(root==q)return q;
+        TreeNode *left=lowestCommonAncestor(root->left,p,q);
+        TreeNode *right=lowestCommonAncestor(root->right,p,q);
+        if(left&&right)return root;
+        if(left)return left;
+        if(right)return right;
+        if(!left&&!right)return NULL;
+    }
+};	
