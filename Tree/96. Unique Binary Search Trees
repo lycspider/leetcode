@@ -1,0 +1,65 @@
+/*
+  Given n, how many structurally unique BST's (binary search trees) that store values 1...n?
+
+  For example,
+  Given n = 3, there are a total of 5 unique BST's.
+
+     1         3     3      2      1
+      \       /     /      / \      \
+       3     2     1      1   3      2
+      /     /       \                 \
+     2     1         2                 3
+  给定n，求1~n构成的所有二叉查找树（BST）的数量
+  */
+  
+  /*
+    算法思路：
+    对于 1,···,i-1,i,i+1,···,n，选取i为根节点，则
+    根节点：i
+    左子树：1,···,i-1 (i-1)
+    右子数：i+1,···,n (n-i)
+    以i为根节点的二叉查找树数目：
+      sumi=n[i-1]+n[n-i]
+    则由1~n构成的所有二叉查找树（BST）的数目：
+      n[n]=∑sumi=∑(n[i-1]+n[n-i]),  i=1,···n
+    
+    实际上实在求解卡特兰数：
+      卡特兰数（Catalan number）:组合数学中一个常出现在各种计数问题中出现的数列
+        令h(0)=1,h(1)=1，
+      catalan数满足递推式：
+        h(n)= h(0)*h(n-1)+h(1)*h(n-2) + ... + h(n-1)*h(0) (n>=2)
+            例如：h(2)=h(0)*h(1)+h(1)*h(0)=1*1+1*1=2
+            h(3)=h(0)*h(2)+h(1)*h(1)+h(2)*h(0)=1*2+1*1+2*1=5
+      另类递推式：
+        h(n)=h(n-1)*(4*n-2)/(n+1);
+      递推关系的解为：
+        h(n)=C(2n,n)/(n+1) (n=0,1,2,...)
+      递推关系的另类解为：
+        h(n)=c(2n,n)-c(2n,n-1)(n=0,1,2,...)
+*/
+
+/*
+  算法复杂度：
+  本题与计算斐波那契数列类似，使用递归的话，会有很多重复计算的地方，因此本题采用自底向上的迭代方法计算
+  时间复杂度：O(n^2)
+  空间复杂度：O(n)
+*/
+
+class Solution {
+public:
+    int numTrees(int n) {
+        if(n<=0)
+            return -1;
+        if(n==1)
+            return 1;
+        vector<int> a(n+1,0);
+        a[0]=a[1]=1;
+        for(auto i=2;i<=n;i++){
+            for(auto j=0;j<i;j++){
+                a[i]+=a[j]*a[i-j-1];
+            }
+        }
+        return a[n];
+    }
+};
+
